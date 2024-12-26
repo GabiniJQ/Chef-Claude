@@ -14,7 +14,7 @@ export async function getRecipeFromMistral(ingredientsArr) {
         { role: 'system', content: SYSTEM_PROMPT },
         {
           role: 'user',
-          content: `Tengo ${ingredientsString}. Por favor dame una receta que me recomendarías hacer con dichos ingredientes.`,
+          content: `Tengo ${ingredientsString}. Por favor dame una receta que me recomendarías hacer con dichos ingredientes, teniendo en cuenta el idioma más presente en los ingredientes.`,
         },
       ],
       max_tokens: 1024,
