@@ -1,7 +1,14 @@
 import React from 'react'
+import ClaudeRecipe from './ClaudeRecipe'
+import IngredientsList from './IngredientsList'
 
 export default function Main() {
-  const [ingredients, setIngredients] = React.useState([])
+  const [ingredients, setIngredients] = React.useState([
+    'pasta',
+    'tomato',
+    'chicken',
+    'oregano',
+  ])
 
   function addIngredient(formData) {
     const newIngredient = formData.get('ingredient')
@@ -11,9 +18,11 @@ export default function Main() {
     ])
   }
 
-  const displayIngredients = ingredients.map((ingredient) => {
-    return <li key={ingredient}>{ingredient}</li>
-  })
+  const [recipeShown, setRecipeShown] = React.useState(false)
+
+  function toggleRecipeShown() {
+    setRecipeShown((prevRecipeShown) => !prevRecipeShown)
+  }
 
   return (
     <main>
@@ -25,9 +34,15 @@ export default function Main() {
           name='ingredient'
           autoComplete='off'
         />
-        <button>Add ingredient</button>
+        <button>Añadir ingrediente</button>
       </form>
-      <ul>{displayIngredients}</ul>
+      {ingredients.length > 0 && (
+        <IngredientsList
+          ingredients={ingredients}
+          toggleRecipeShown={toggleRecipeShown}
+        />
+      )}
+      {recipeShown && <ClaudeRecipe />}
     </main>
   )
 }
