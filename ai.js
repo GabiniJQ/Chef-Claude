@@ -14,7 +14,7 @@ export async function getRecipeFromMistral(ingredientsArr) {
         { role: 'system', content: SYSTEM_PROMPT },
         {
           role: 'user',
-          content: `I have ${ingredientsString}. Please give me a recipe you'd recommend I make!`,
+          content: `I have ${ingredientsString}. Please give me a recipe you'd recommend I make! Don't respond with confirmation messages like Sure or Of course!`,
         },
       ],
       max_tokens: 1024,

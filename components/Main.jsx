@@ -11,28 +11,29 @@ export default function Main() {
 
   // Validate and Add form input into ingredients array
   function addIngredient(formData) {
-    const newIngredient = formData.get('ingredient').trim()
+    const newIngredient = formData.get('ingredient').trim().toLowerCase()
     const letterRegex = /^[\p{L}\s]+$/u
 
     if (newIngredient === '') {
-      setErrorMessage('Empty') // Campo vacío
+      setErrorMessage('The chef cannot recieve blank ingredients!')
       return
-    }
-
-    if (!letterRegex.test(newIngredient)) {
-      setErrorMessage('Only letters')
-      return
-    }
-
-    setIngredients((prevIngredients) => [...prevIngredients, newIngredient])
-    setErrorMessage('')
-
-    /* if (letterRegex.test(newIngredient)) {
-      setIngredients((prevIngredient) => [...prevIngredient, newIngredient])
-      setIsWrongIngredient((prevIsWrong) => !prevIsWrong)
     } else {
-      setIsWrongIngredient((prevIsWrong) => !prevIsWrong)
-    }*/
+      if (!letterRegex.test(newIngredient)) {
+        setErrorMessage('Please submit valid ingredients')
+        return
+      } else {
+        if (!ingredients.includes(newIngredient)) {
+          setIngredients((prevIngredients) => [
+            ...prevIngredients,
+            newIngredient,
+          ])
+          setErrorMessage('')
+        } else {
+          setErrorMessage('Ingredient is already on the list')
+          return
+        }
+      }
+    }
   }
 
   // Call API for recipe markdown

@@ -1,6 +1,10 @@
 export default function IngredientsList(props) {
   const displayIngredients = props.ingredients.map((ingredient) => {
-    return <li key={ingredient}>{ingredient}</li>
+    return (
+      <li key={ingredient}>
+        {ingredient.charAt(0).toUpperCase() + ingredient.slice(1)}
+      </li>
+    )
   })
   return (
     <section className='ingredient-list-container'>
