@@ -10,5 +10,4 @@ Currently, two official plugins are available:
 Mejoras:
 
 -Especificar al user el mínimo de ingredientes para buscar receta.
-
-Token Huggin Face:
+-Multiples idiomas

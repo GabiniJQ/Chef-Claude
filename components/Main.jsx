@@ -4,15 +4,38 @@ import IngredientsList from './IngredientsList'
 import { getRecipeFromMistral } from '../ai'
 
 export default function Main() {
+  // Set state values
   const [ingredients, setIngredients] = React.useState([])
+  const [recipe, setRecipe] = React.useState('')
+  const [errorMessage, setErrorMessage] = React.useState('')
 
+  // Validate and Add form input into ingredients array
   function addIngredient(formData) {
-    const newIngredient = formData.get('ingredient')
-    setIngredients((prevIngredient) => [...prevIngredient, newIngredient])
+    const newIngredient = formData.get('ingredient').trim()
+    const letterRegex = /^[\p{L}\s]+$/u
+
+    if (newIngredient === '') {
+      setErrorMessage('Empty') // Campo vacío
+      return
+    }
+
+    if (!letterRegex.test(newIngredient)) {
+      setErrorMessage('Only letters')
+      return
+    }
+
+    setIngredients((prevIngredients) => [...prevIngredients, newIngredient])
+    setErrorMessage('')
+
+    /* if (letterRegex.test(newIngredient)) {
+      setIngredients((prevIngredient) => [...prevIngredient, newIngredient])
+      setIsWrongIngredient((prevIsWrong) => !prevIsWrong)
+    } else {
+      setIsWrongIngredient((prevIsWrong) => !prevIsWrong)
+    }*/
   }
 
-  const [recipe, setRecipe] = React.useState('')
-
+  // Call API for recipe markdown
   async function getRecipe() {
     const recipeMarkdown = await getRecipeFromMistral(ingredients)
     setRecipe(recipeMarkdown)
@@ -21,14 +44,17 @@ export default function Main() {
   return (
     <main>
       <form action={addIngredient} className='add-ingredient-form'>
-        <input
-          type='text'
-          placeholder='e.g oregano'
-          aria-label='Add ingredient'
-          name='ingredient'
-          autoComplete='off'
-        />
-        <button>Añadir ingrediente</button>
+        <div className='container-input-btn'>
+          <input
+            type='text'
+            placeholder='ex: oregano'
+            aria-label='Add ingredient'
+            name='ingredient'
+            autoComplete='off'
+          />
+          <button type='submit'>Add ingredients</button>
+        </div>
+        <p>{errorMessage}</p>
       </form>
       {ingredients.length > 0 && (
         <IngredientsList ingredients={ingredients} getRecipe={getRecipe} />
