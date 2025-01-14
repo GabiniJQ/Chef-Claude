@@ -11,3 +11,5 @@ Response and service by free model Mixtral-8x7B on HuggingFace might be unavaila
 
 - HTML, CSS, JS (React)
 - mistralai model Mixtral-8x7B
+
+![Demo Screenshot](public/img/demo-img.png)
