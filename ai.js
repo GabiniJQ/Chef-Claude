@@ -14,7 +14,7 @@ export async function getRecipeFromMistral(ingredientsArr) {
         { role: 'system', content: SYSTEM_PROMPT },
         {
           role: 'user',
-          content: `I have ${ingredientsString}. Please give me a recipe you'd recommend I make! Don't respond with confirmation messages like Sure or Of course!`,
+          content: `I have ${ingredientsString}. Please give me a recipe you'd recommend I make!`,
         },
       ],
       max_tokens: 1024,
@@ -22,5 +22,6 @@ export async function getRecipeFromMistral(ingredientsArr) {
     return response.choices[0].message.content
   } catch (err) {
     console.error(err.message)
+    throw err
   }
 }

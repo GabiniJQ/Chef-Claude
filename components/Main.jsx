@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ClaudeRecipe from './ClaudeRecipe'
 import IngredientsList from './IngredientsList'
 import { getRecipeFromMistral } from '../ai'
@@ -8,6 +8,9 @@ export default function Main() {
   const [ingredients, setIngredients] = React.useState([])
   const [recipe, setRecipe] = React.useState('')
   const [errorMessage, setErrorMessage] = React.useState('')
+  const [errorRecipe, setErrorRecipe] = React.useState('')
+  const [isLoading, setIsLoading] = React.useState(false)
+  const recipeSection = React.useRef(null)
 
   // Validate and Add form input into ingredients array
   function addIngredient(formData) {
@@ -38,12 +41,35 @@ export default function Main() {
 
   // Call API for recipe markdown
   async function getRecipe() {
-    const recipeMarkdown = await getRecipeFromMistral(ingredients)
-    setRecipe(recipeMarkdown)
+    try {
+      setIsLoading(true)
+      setErrorRecipe('')
+
+      // Call API for recipe
+      const recipeMarkdown = await getRecipeFromMistral(ingredients)
+      setRecipe(recipeMarkdown)
+    } catch (error) {
+      setErrorRecipe('Error generating recipe: Service Unavailable')
+    } finally {
+      // Asegurarse de que el estado de carga se desactive
+      setIsLoading(false)
+    }
   }
+
+  useEffect(() => {
+    if (recipe) {
+      recipeSection.current.scrollIntoView()
+      setIsLoading((prevIsLoading) => !prevIsLoading)
+    }
+  }, [recipe])
 
   return (
     <main>
+      <p>
+        Get an exquisit cooking recipe from the Chef Claude by adding
+        ingredients to the list. Chef Claude needs at least 4 ingredients to
+        procede with a recipe.
+      </p>
       <form action={addIngredient} className='add-ingredient-form'>
         <div className='container-input-btn'>
           <input
@@ -53,12 +79,19 @@ export default function Main() {
             name='ingredient'
             autoComplete='off'
           />
-          <button type='submit'>Add ingredients</button>
+          {/* <button type='submit'>Add ingredient</button> */}
+          <button type='submit'>Add ingredient</button>
         </div>
-        <p>{errorMessage}</p>
+        <p className='text-error'>{errorMessage}</p>
       </form>
       {ingredients.length > 0 && (
-        <IngredientsList ingredients={ingredients} getRecipe={getRecipe} />
+        <IngredientsList
+          ingredients={ingredients}
+          getRecipe={getRecipe}
+          ref={recipeSection}
+          isLoading={isLoading}
+          errorRecipe={errorRecipe}
+        />
       )}
       {recipe && <ClaudeRecipe recipe={recipe} />}
     </main>
