@@ -1,5 +1,4 @@
 export default function IngredientsList(props) {
-  console.log('isLoaded: ' + props.isLoaded)
   const displayIngredients = props.ingredients.map((ingredient) => {
     return (
       <li key={ingredient}>
@@ -15,7 +14,7 @@ export default function IngredientsList(props) {
       </ul>
       {displayIngredients.length > 3 && (
         <>
-          <div className='get-recipe-container' ref={props.ref}>
+          <div className='get-recipe-container'>
             <div>
               <h3>Ready for a recipe?</h3>
               <p>Generate a recipe according to your ingredients list</p>

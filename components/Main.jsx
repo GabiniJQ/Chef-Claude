@@ -60,7 +60,7 @@ export default function Main() {
 
   useEffect(() => {
     if (recipe) {
-      recipeSection.current.scrollIntoView()
+      recipeSection.current.scrollIntoView({ behavior: 'smooth' })
       setIsLoading(false)
       setIsLoaded(true)
     }
@@ -91,13 +91,12 @@ export default function Main() {
         <IngredientsList
           ingredients={ingredients}
           getRecipe={getRecipe}
-          ref={recipeSection}
           isLoading={isLoading}
           isLoaded={isLoaded}
           errorRecipe={errorRecipe}
         />
       )}
-      {recipe && <ClaudeRecipe recipe={recipe} />}
+      {recipe && <ClaudeRecipe recipe={recipe} ref={recipeSection} />}
     </main>
   )
   //awo
