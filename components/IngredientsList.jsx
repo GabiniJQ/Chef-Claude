@@ -1,4 +1,5 @@
 export default function IngredientsList(props) {
+  console.log('isLoaded: ' + props.isLoaded)
   const displayIngredients = props.ingredients.map((ingredient) => {
     return (
       <li key={ingredient}>
@@ -19,7 +20,10 @@ export default function IngredientsList(props) {
               <h3>Ready for a recipe?</h3>
               <p>Generate a recipe according to your ingredients list</p>
             </div>
-            <button onClick={props.getRecipe} disabled={props.isLoading}>
+            <button
+              onClick={props.getRecipe}
+              disabled={props.isLoading || props.isLoaded}
+            >
               {props.isLoading ? (
                 <svg className='loading-svg'>
                   <circle cx={10} cy={10} r={8}></circle>

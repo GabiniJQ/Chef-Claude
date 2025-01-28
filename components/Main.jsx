@@ -10,6 +10,7 @@ export default function Main() {
   const [errorMessage, setErrorMessage] = React.useState('')
   const [errorRecipe, setErrorRecipe] = React.useState('')
   const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoaded, setIsLoaded] = React.useState(false)
   const recipeSection = React.useRef(null)
 
   // Validate and Add form input into ingredients array
@@ -53,13 +54,15 @@ export default function Main() {
     } finally {
       // Asegurarse de que el estado de carga se desactive
       setIsLoading(false)
+      setIsLoaded(true)
     }
   }
 
   useEffect(() => {
     if (recipe) {
       recipeSection.current.scrollIntoView()
-      setIsLoading((prevIsLoading) => !prevIsLoading)
+      setIsLoading(false)
+      setIsLoaded(true)
     }
   }, [recipe])
 
@@ -67,8 +70,8 @@ export default function Main() {
     <main>
       <p>
         Get an exquisit cooking recipe from the Chef Claude by adding
-        ingredients to the list. Chef Claude needs at least 4 ingredients to
-        procede with a recipe.
+        ingredients one by one to the list. Chef Claude needs at least 4
+        ingredients to procede with a recipe.
       </p>
       <form action={addIngredient} className='add-ingredient-form'>
         <div className='container-input-btn'>
@@ -90,6 +93,7 @@ export default function Main() {
           getRecipe={getRecipe}
           ref={recipeSection}
           isLoading={isLoading}
+          isLoaded={isLoaded}
           errorRecipe={errorRecipe}
         />
       )}

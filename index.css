@@ -203,6 +203,15 @@ ul.ingredients-list > li {
   box-shadow: 0 0 0 4px rgba(211, 125, 96, 0.5);
 }
 
+/* Disabled button */
+
+.get-recipe-container button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed; 
+  pointer-events: none;
+}
+
+
 .suggested-recipe-container {
   color: #475467;
   line-height: 28px;
