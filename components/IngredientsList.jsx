@@ -15,7 +15,7 @@ export default function IngredientsList(props) {
       {displayIngredients.length > 3 && (
         <>
           <div className='get-recipe-container'>
-            <div>
+            <div className='get-recipe-heading'>
               <h3>Ready for a recipe?</h3>
               <p>Generate a recipe according to your ingredients list</p>
             </div>

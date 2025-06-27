@@ -68,36 +68,42 @@ export default function Main() {
 
   return (
     <main>
-      <p>
-        Get an exquisit cooking recipe from the Chef Claude by adding
-        ingredients one by one to the list. Chef Claude needs at least 4
-        ingredients to procede with a recipe.
-      </p>
-      <form action={addIngredient} className='add-ingredient-form'>
-        <div className='container-input-btn'>
-          <input
-            type='text'
-            placeholder='ex: oregano'
-            aria-label='Add ingredient'
-            name='ingredient'
-            autoComplete='off'
+      <div className='hero'>
+        <h1>Lets get you an exquisit cooking recipe!</h1>
+
+        <ul className='instructions'>
+          <li>Add ingredients <strong>one by one</strong> to the list.</li>
+          <li>
+            Chef Claude needs <strong>at least 4 </strong>
+            ingredients to procede with a recipe.
+          </li>
+        </ul>
+        <form action={addIngredient} className='add-ingredient-form'>
+          <div className='container-input-btn'>
+            <input
+              type='text'
+              placeholder='ex: oregano'
+              aria-label='Add ingredient'
+              name='ingredient'
+              autoComplete='off'
+            />
+            {/* <button type='submit'>Add ingredient</button> */}
+            <button type='submit'>Add ingredient</button>
+          </div>
+          <p className='text-error'>{errorMessage}</p>
+        </form>
+        {ingredients.length > 0 && (
+          <IngredientsList
+            ingredients={ingredients}
+            getRecipe={getRecipe}
+            isLoading={isLoading}
+            isLoaded={isLoaded}
+            errorRecipe={errorRecipe}
           />
-          {/* <button type='submit'>Add ingredient</button> */}
-          <button type='submit'>Add ingredient</button>
-        </div>
-        <p className='text-error'>{errorMessage}</p>
-      </form>
-      {ingredients.length > 0 && (
-        <IngredientsList
-          ingredients={ingredients}
-          getRecipe={getRecipe}
-          isLoading={isLoading}
-          isLoaded={isLoaded}
-          errorRecipe={errorRecipe}
-        />
-      )}
+        )}
+      </div>
+
       {recipe && <ClaudeRecipe recipe={recipe} ref={recipeSection} />}
     </main>
   )
-  //awo
 }
