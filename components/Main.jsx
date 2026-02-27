@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import ClaudeRecipe from './ClaudeRecipe'
 import IngredientsList from './IngredientsList'
-import { getRecipeFromMistral } from '../ai'
 
 export default function Main() {
   // Set state values
@@ -11,7 +10,9 @@ export default function Main() {
   const [errorRecipe, setErrorRecipe] = React.useState('')
   const [isLoading, setIsLoading] = React.useState(false)
   const [isLoaded, setIsLoaded] = React.useState(false)
+  const [loadedServer, setLoadedServer] = React.useState(false)
   const recipeSection = React.useRef(null)
+  console.log(loadedServer)
 
   // Validate and Add form input into ingredients array
   function addIngredient(formData) {
@@ -47,8 +48,18 @@ export default function Main() {
       setErrorRecipe('')
 
       // Call API for recipe
-      const recipeMarkdown = await getRecipeFromMistral(ingredients)
-      setRecipe(recipeMarkdown)
+      /* const recipeMarkdown = await getRecipeFromMistral(ingredients) */
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/recipe`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ingredients
+        }),
+      })
+      const data = await response.json()
+      setRecipe(data.recipe)
     } catch (error) {
       setErrorRecipe('Error generating recipe: Service Unavailable')
     } finally {
@@ -66,13 +77,28 @@ export default function Main() {
     }
   }, [recipe])
 
+  useEffect(() => {
+    const pingServer = async () => {
+      await fetch(`${import.meta.env.VITE_API_URL}/ping`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      setLoadedServer(true)
+    }
+    pingServer()
+  }, [])
   return (
     <main>
       <div className='hero'>
         <h1>Lets get you an exquisit cooking recipe!</h1>
 
         <ul className='instructions'>
-          <li>Add ingredients <strong>one by one</strong> to the list.</li>
+          <li>
+            Add ingredients <strong>one by one</strong> to the list.
+          </li>
           <li>
             Chef Claude needs <strong>at least 4 </strong>
             ingredients to procede with a recipe.
@@ -87,7 +113,7 @@ export default function Main() {
               name='ingredient'
               autoComplete='off'
             />
-            {/* <button type='submit'>Add ingredient</button> */}
+
             <button type='submit'>Add ingredient</button>
           </div>
           <p className='text-error'>{errorMessage}</p>
@@ -99,6 +125,7 @@ export default function Main() {
             isLoading={isLoading}
             isLoaded={isLoaded}
             errorRecipe={errorRecipe}
+            loadedServer={loadedServer}
           />
         )}
       </div>

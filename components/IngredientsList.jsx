@@ -1,4 +1,6 @@
 export default function IngredientsList(props) {
+  
+  console.log(import.meta.env.VITE_API_URL)
   const displayIngredients = props.ingredients.map((ingredient) => {
     return (
       <li key={ingredient}>
@@ -6,6 +8,7 @@ export default function IngredientsList(props) {
       </li>
     )
   })
+
   return (
     <section className='ingredient-list-container'>
       <h2>Ingredients on hand:</h2>
@@ -19,18 +22,26 @@ export default function IngredientsList(props) {
               <h3>Ready for a recipe?</h3>
               <p>Generate a recipe according to your ingredients list</p>
             </div>
-            <button
-              onClick={props.getRecipe}
-              disabled={props.isLoading || props.isLoaded}
-            >
-              {props.isLoading ? (
-                <svg className='loading-svg'>
-                  <circle cx={10} cy={10} r={8}></circle>
-                </svg>
-              ) : (
-                'Get Recipe'
-              )}
-            </button>
+            {!props.loadedServer && (
+              <span>Waiting for server start (up to 30 secs)</span>
+            )}
+            {props.loadedServer && (
+              <button
+                onClick={props.getRecipe}
+                disabled={
+                  props.errorRecipe.length === 0 &&
+                  (props.isLoading || props.isLoaded)
+                }
+              >
+                {props.isLoading ? (
+                  <svg className='loading-svg'>
+                    <circle cx={10} cy={10} r={8}></circle>
+                  </svg>
+                ) : (
+                  'Get Recipe'
+                )}
+              </button>
+            )}
           </div>
           {props.errorRecipe && (
             <p className='text-error'>{props.errorRecipe}</p>
