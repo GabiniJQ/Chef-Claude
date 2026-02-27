@@ -9,7 +9,7 @@ You are an assistant that receives a list of ingredients that a user has and sug
 const app = express()
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'https://chef-claude.pages.dev/'],
+    origin: ['http://localhost:5173', 'https://chef-claude.pages.dev'],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   }),
